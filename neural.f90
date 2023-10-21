@@ -49,7 +49,7 @@ program neural
 
 contains
 
-! 単純パーセプトロンの伝達関数
+! パーセプトロンの伝達関数
 integer elemental function hardlim(x) result(a)
 	implicit none
 	real(dp), intent(in) :: x
@@ -63,7 +63,7 @@ subroutine evaluate(p)
 	A = hardlim(matmul(W, p) + b)
 end subroutine
 
-! 単純パーセプトロンのトレーニングを行う
+! パーセプトロンのトレーニングを行う
 subroutine train(p, t)
 	implicit none
 	integer, dimension(INPUT_DIM, 1), intent(in) :: p
