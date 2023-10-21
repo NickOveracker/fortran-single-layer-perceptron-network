@@ -56,22 +56,10 @@ integer elemental function hardlim(x) result(a)
 	a = merge(1, 0, x >= 0)
 end function
 
-real(dp) elemental function matadd(x1, x2) result(y)
-	implicit none
-	real(dp), intent(in) :: x1, x2
-	y = x1 + x2
-end function
-
-integer elemental function matsub(n1, n2) result(y)
-	implicit none
-	integer, intent(in) :: n1, n2
-	y = n1 - n2
-end function
-
 subroutine evaluate(p)
 	implicit none
 	integer, dimension(INPUT_DIM, 1), intent(in) :: p
-	A = hardlim(matadd(matmul(W, p), b))
+	A = hardlim(matmul(W, p) + b)
 end subroutine
 
 subroutine train(p, t)
@@ -79,9 +67,9 @@ subroutine train(p, t)
 	integer, dimension(INPUT_DIM, 1), intent(in) :: p
 	integer, dimension(NUM_NEURONS, 1), intent(in) :: t
 	call evaluate(p)
-	e = matsub(t, A)
-	Wnew = matadd(W, dble(matmul(e, transpose(p))))
-	bnew = matadd(b, dble(e))
+	e = t - A
+	Wnew = W + dble(matmul(e, transpose(p)))
+	bnew = b + dble(e)
 end subroutine
 
 end program neural
